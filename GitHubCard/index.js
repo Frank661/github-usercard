@@ -1,8 +1,10 @@
+import axios from 'axios';
 /*
   STEP 1: using axios, send a GET request to the following URL
     (replacing the placeholder with your Github name):
     https://api.github.com/users/<your name>
 */
+
 
 /*
   STEP 2: Inspect and study the data coming back, this is YOUR
@@ -11,6 +13,8 @@
 
     Skip to STEP 3.
 */
+
+
 
 /*
   STEP 4: Pass the data received from Github into your function,
@@ -28,7 +32,8 @@
     user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+
+
 
 /*
   STEP 3: Create a function that accepts a single object as its only argument.
@@ -49,6 +54,91 @@ const followersArray = [];
       </div>
     </div>
 */
+
+axios.get("https://api.github.com/users/Frank661")
+.then(successResponse => {
+  console.log("axios")
+  const myProfile = successResponse.data
+  const entryPoint = document.querySelector('.cards')
+  const finalCard = singleObj(myProfile)
+  entryPoint.appendChild(finalCard)
+})
+
+.catch((errorResponse)=> {
+  alert("Error Error")
+})
+
+
+const followersArray = [
+  "tetondan",
+  "dustinmyers",
+  "justsml",
+  "luishrd",
+  "bigknell",];
+
+  followersArray.forEach (user => axios.get(`https://api.github.com/users/${user}`)
+  .then(response => {
+    let card = singleObj(response.data)
+    const cards = document.querySelector('.cards')
+    cards.appendChild(card)
+  }))
+
+
+function singleObj(obj) {
+  const newDiv = document.createElement('div')
+  const newImg = document.createElement('img')
+  const secDiv = document.createElement('div')
+  const newH3 = document.createElement('h3')
+  const pClass = document.createElement('p')
+  const pLocation = document.createElement('p')
+  const pProfile = document.createElement('p')
+
+  const achor = document.createElement('a')
+  const pFollowers = document.createElement('p')
+  const pFollowing = document.createElement('p')
+  const pBio = document.createElement('p')
+ 
+  const anchor = document.createTextNode(obj.html_url)
+  achor.href = obj.html_url
+  newDiv.className = "card"
+  secDiv.className = "card-info"
+  newH3.className = "name"
+  pClass.className = "username"
+
+  newImg.src = obj.avatar_url
+  newH3.textContent = obj.name
+  pClass.textContent = obj.login
+  pLocation.textContent = "Location: " + obj.location
+  pProfile.textContent = 'Profile: '
+
+  // achor. = obj.html_url;
+  // let anchor = document.querySelector("a").href = obj.html_url;
+  // achor.textContent = txt.link(obj.html_url)
+  pFollowers.textContent = 'Followers: ' + obj.followers
+  pFollowing.textContent = 'Following:' + obj.following
+  pBio.textContent = obj.bio
+
+
+
+
+
+
+  achor.appendChild(anchor)
+  pProfile.append(achor)
+  secDiv.append(newH3,pClass,pLocation,pProfile,pFollowers,pFollowing,pBio)
+  newDiv.append(newImg,secDiv)
+
+ 
+  return newDiv
+
+
+}
+
+console.log(singleObj());
+
+
+
+
 
 /*
   List of LS Instructors Github username's:
